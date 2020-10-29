@@ -19,6 +19,7 @@ const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
 const mongooseOptions = {
   useNewURLParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 };
 
 mongoose.connect(dbURL, mongooseOptions, (err) => {
