@@ -15,9 +15,9 @@ const LinkSchema = new mongoose.Schema({
     trim: true,
     set: setName,
   },
-  age: {
-    type: Number,
-    min: 0,
+  url: {
+    type: String,
+    // fix for string
     required: true,
   },
   favorite: {
@@ -41,7 +41,7 @@ const LinkSchema = new mongoose.Schema({
 
 LinkSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  age: doc.age,
+  url: doc.url,
   favorite: doc.favorite,
   leastFavorite: doc.leastFavorite,
 });
@@ -51,7 +51,7 @@ LinkSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return LinkModel.find(search).select('name age favorite leastFavorite').lean().exec(callback);
+  return LinkModel.find(search).select('name url favorite leastFavorite').lean().exec(callback);
 };
 
 LinkModel = mongoose.model('Link', LinkSchema);

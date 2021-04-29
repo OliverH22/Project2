@@ -3,8 +3,8 @@ const handleLink = (e) => {
     
     $("#linkMessage").animate({width:'hide'},350);
     
-    if($("#linkName").val() == '' || $("#linkAge").val() == ''){
-      handleError("RAWR! Name and age are required");
+    if($("#linkName").val() == '' || $("#linkUrl").val() == ''){
+      handleError("RAWR! Name and url are required");
       return false;
     }
     
@@ -41,8 +41,8 @@ const handleLink = (e) => {
         >
         <label htmlFor="name">Name: </label>
         <input id="linkName" type="text" name="name" placeholder="Link Name"/>
-        <label htmlFor="age">Age: </label>
-        <input id="linkAge" type="text" name="age" placeholder="Link Age"/>
+        <label htmlFor="url">Url: </label>
+        <input id="linkUrl" type="text" name="url" placeholder="Link Url"/>
         <label htmlFor="favorite">Likes: </label>
         <input id="fav" type="text" name="favorite" placeholder="unknown"/>
         <label htmlFor="leastFavorite">Dislikes: </label>
@@ -66,8 +66,8 @@ const handleLink = (e) => {
         >
         <label htmlFor="name">Name: </label>
         <input id="linkName" type="text" name="name" placeholder={link.name}/>
-        <label htmlFor="age">Age: </label>
-        <input id="linkAge" type="text" name="age" placeholder={link.age}/>
+        <label htmlFor="url">Url: </label>
+        <input id="linkUrl" type="text" name="url" placeholder={link.url}/>
         <label htmlFor="favorite">Likes: </label>
         <input id="fav" type="text" name="favorite" placeholder={link.favorite}/>
         <label htmlFor="leastFavorite">Dislikes: </label>
@@ -102,7 +102,7 @@ const handleLink = (e) => {
         <div key={link._id} className="link">
           <img src="/assets/img/linkface.jpeg" alt="link face" className="linkFace" />
           <h3 className="linkName"> Name: {link.name}</h3>
-          <h3 className="linkAge"> Age: {link.age}</h3>
+          <h3 className="linkUrl"> Url: {link.url}</h3>
           <h4>Favorite: {link.favorite}</h4>
           <h4>Least Favorite: {link.leastFavorite}</h4>
           <a className="editButton" href="" onClick={setForm}>Edit</a>

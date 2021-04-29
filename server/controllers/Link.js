@@ -13,8 +13,8 @@ const makerPage = (req, res) => {
 };
 
 const makeLink = (req, res) => {
-  if (!req.body.name || !req.body.age) {
-    return res.status(400).json({ error: 'RAWR! Both name and age are required' });
+  if (!req.body.name || !req.body.url) {
+    return res.status(400).json({ error: 'RAWR! Both name and url are required' });
   }
 
   const favorite = req.body.favorite || 'unknown';
@@ -22,7 +22,7 @@ const makeLink = (req, res) => {
 
   const linkData = {
     name: req.body.name,
-    age: req.body.age,
+    url: req.body.url,
     favorite,
     leastFavorite,
     owner: req.session.account._id,
@@ -83,8 +83,8 @@ const updateLink = (request, response) => {
       tempLink.name = req.body.name;
     }
 
-    if (req.body.age) {
-      tempLink.age = req.body.age;
+    if (req.body.url) {
+      tempLink.url = req.body.url;
     }
 
     if (req.body.favorite) {
