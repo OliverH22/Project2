@@ -6,11 +6,11 @@ const getToken = (callback,data) => {
 
 const handleError = (message) => {
     $("#errorMessage").text(message);
-    $("#domoMessage").animate({width:'toggle'},350);
+    $("#linkMessage").animate({width:'toggle'},350);
 };
 
 const redirect = (response) => {
-    $("#domoMessage").animate({width:'hide'},350);
+    $("#linkMessage").animate({width:'hide'},350);
     window.location = response.redirect;
 };
 

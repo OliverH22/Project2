@@ -1,60 +1,60 @@
 "use strict";
 
-// Handles the process of creating a new domo
-var handleDomo = function handleDomo(e) {
+// Handles the process of creating a new link
+var handleLink = function handleLink(e) {
   e.preventDefault();
 
-  $("#domoMessage").animate({ width: 'hide' }, 350);
+  $("#linkMessage").animate({ width: 'hide' }, 350);
 
-  if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+  if ($("#linkName").val() == '' || $("#linkAge").val() == '') {
     handleError("RAWR! Name and age are required");
     return false;
   }
 
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-    loadDomosFromServer();
+  sendAjax('POST', $("#linkForm").attr("action"), $("#linkForm").serialize(), function () {
+    loadLinksFromServer();
   });
 
   return false;
 };
 
-// Handles the process of updating an existing domo
+// Handles the process of updating an existing link
 var handleUpdate = function handleUpdate(e) {
   e.preventDefault();
 
-  $("#domoMessage").animate({ width: 'hide' }, 350);
+  $("#linkMessage").animate({ width: 'hide' }, 350);
 
   sendAjax('POST', $("#updateForm").attr("action"), $("#updateForm").serialize(), function () {
-    getToken(generateDomoForm, {});
-    loadDomosFromServer();
+    getToken(generateLinkForm, {});
+    loadLinksFromServer();
   });
 
   return false;
 };
 
-// Function for generating the JSX for the domo submission form
-var DomoForm = function DomoForm(props) {
+// Function for generating the JSX for the link submission form
+var LinkForm = function LinkForm(props) {
   return React.createElement(
     "form",
-    { id: "domoForm",
-      onSubmit: handleDomo,
-      name: "domoForm",
+    { id: "linkForm",
+      onSubmit: handleLink,
+      name: "linkForm",
       action: "/maker",
       method: "POST",
-      className: "domoForm"
+      className: "linkForm"
     },
     React.createElement(
       "label",
       { htmlFor: "name" },
       "Name: "
     ),
-    React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
+    React.createElement("input", { id: "linkName", type: "text", name: "name", placeholder: "Link Name" }),
     React.createElement(
       "label",
       { htmlFor: "age" },
       "Age: "
     ),
-    React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
+    React.createElement("input", { id: "linkAge", type: "text", name: "age", placeholder: "Link Age" }),
     React.createElement(
       "label",
       { htmlFor: "favorite" },
@@ -68,102 +68,102 @@ var DomoForm = function DomoForm(props) {
     ),
     React.createElement("input", { id: "leastFav", type: "text", name: "leastFavorite", placeholder: "unknown" }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-    React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
+    React.createElement("input", { className: "makeLinkSubmit", type: "submit", value: "Make Link" })
   );
 };
 
-// Function for generating the JSX for the domo submission form
+// Function for generating the JSX for the link submission form
 var UpdateForm = function UpdateForm(props) {
-  var domo = props.domo;
+  var link = props.link;
   return React.createElement(
     "form",
     { id: "updateForm",
       onSubmit: handleUpdate,
       name: "updateForm",
-      action: "/updateDomo",
+      action: "/updateLink",
       method: "POST",
-      className: "domoForm"
+      className: "linkForm"
     },
     React.createElement(
       "label",
       { htmlFor: "name" },
       "Name: "
     ),
-    React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: domo.name }),
+    React.createElement("input", { id: "linkName", type: "text", name: "name", placeholder: link.name }),
     React.createElement(
       "label",
       { htmlFor: "age" },
       "Age: "
     ),
-    React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: domo.age }),
+    React.createElement("input", { id: "linkAge", type: "text", name: "age", placeholder: link.age }),
     React.createElement(
       "label",
       { htmlFor: "favorite" },
       "Likes: "
     ),
-    React.createElement("input", { id: "fav", type: "text", name: "favorite", placeholder: domo.favorite }),
+    React.createElement("input", { id: "fav", type: "text", name: "favorite", placeholder: link.favorite }),
     React.createElement(
       "label",
       { htmlFor: "leastFavorite" },
       "Dislikes: "
     ),
-    React.createElement("input", { id: "leastFav", type: "text", name: "leastFavorite", placeholder: domo.leastFavorite }),
+    React.createElement("input", { id: "leastFav", type: "text", name: "leastFavorite", placeholder: link.leastFavorite }),
     React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-    React.createElement("input", { type: "hidden", name: "_id", value: domo._id }),
-    React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Save Domo" }),
-    React.createElement("input", { className: "makeDomoSubmit", type: "button", id: "cancelEdit", value: "Cancel" })
+    React.createElement("input", { type: "hidden", name: "_id", value: link._id }),
+    React.createElement("input", { className: "makeLinkSubmit", type: "submit", value: "Save Link" }),
+    React.createElement("input", { className: "makeLinkSubmit", type: "button", id: "cancelEdit", value: "Cancel" })
   );
 };
 
-// Function for generating JSX to display the current user's domos
-var DomoList = function DomoList(props) {
-  if (props.domos.length === 0) {
+// Function for generating JSX to display the current user's links
+var LinkList = function LinkList(props) {
+  if (props.links.length === 0) {
     return React.createElement(
       "div",
-      { className: "domolist" },
+      { className: "linklist" },
       React.createElement(
         "h3",
-        { className: "emptyDomo" },
-        "No Domos yet"
+        { className: "emptyLink" },
+        "No Links yet"
       )
     );
   }
 
-  var domoNodes = props.domos.map(function (domo) {
-    //console.dir(domo);
+  var linkNodes = props.links.map(function (link) {
+    //console.dir(link);
     var setForm = function setForm(e) {
       e.preventDefault();
 
-      getToken(generateUpdateForm, { domo: domo });
+      getToken(generateUpdateForm, { link: link });
       return false;
     };
     return React.createElement(
       "div",
-      { key: domo._id, className: "domo" },
-      React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+      { key: link._id, className: "link" },
+      React.createElement("img", { src: "/assets/img/linkface.jpeg", alt: "link face", className: "linkFace" }),
       React.createElement(
         "h3",
-        { className: "domoName" },
+        { className: "linkName" },
         " Name: ",
-        domo.name
+        link.name
       ),
       React.createElement(
         "h3",
-        { className: "domoAge" },
+        { className: "linkAge" },
         " Age: ",
-        domo.age
+        link.age
       ),
       React.createElement(
         "h4",
         null,
         "Favorite thing: ",
-        domo.favorite
+        link.favorite
       ),
       React.createElement(
         "h4",
         null,
         "Least Favorite thing: ",
-        domo.leastFavorite
+        link.leastFavorite
       ),
       React.createElement(
         "a",
@@ -175,33 +175,33 @@ var DomoList = function DomoList(props) {
 
   return React.createElement(
     "div",
-    { id: "domoList" },
-    domoNodes
+    { id: "linkList" },
+    linkNodes
   );
 };
 
-// Ajax request to get a list of Domos from the server
-var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
+// Ajax request to get a list of Links from the server
+var loadLinksFromServer = function loadLinksFromServer() {
+  sendAjax('GET', '/getLinks', null, function (data) {
     //console.dir(data);
-    ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
+    ReactDOM.render(React.createElement(LinkList, { links: data.links }), document.querySelector("#links"));
   });
 };
 
-//Renders the DomoForm object
-var generateDomoForm = function generateDomoForm(csrf) {
+//Renders the LinkForm object
+var generateLinkForm = function generateLinkForm(csrf) {
   //renders form
-  ReactDOM.render(React.createElement(DomoForm, { csrf: csrf }), document.querySelector("#makeDomo"));
+  ReactDOM.render(React.createElement(LinkForm, { csrf: csrf }), document.querySelector("#makeLink"));
 };
 
 //Renders the UpdateForm object
 var generateUpdateForm = function generateUpdateForm(csrf, data) {
   //renders form
-  ReactDOM.render(React.createElement(UpdateForm, { csrf: csrf, domo: data.domo }), document.querySelector("#makeDomo"));
+  ReactDOM.render(React.createElement(UpdateForm, { csrf: csrf, link: data.link }), document.querySelector("#makeLink"));
 
   document.querySelector("#cancelEdit").addEventListener("click", function (e) {
     e.preventDefault();
-    getToken(generateDomoForm, {});
+    getToken(generateLinkForm, {});
     return false;
   });
 };
@@ -209,12 +209,12 @@ var generateUpdateForm = function generateUpdateForm(csrf, data) {
 // Sets up the maker page
 var setup = function setup(csrf) {
   //console.log("Setup - maker called");
-  generateDomoForm(csrf);
+  generateLinkForm(csrf);
 
-  //renders default domo list display
-  ReactDOM.render(React.createElement(DomoList, { domos: [] }), document.querySelector("#domos"));
+  //renders default link list display
+  ReactDOM.render(React.createElement(LinkList, { links: [] }), document.querySelector("#links"));
 
-  loadDomosFromServer();
+  loadLinksFromServer();
 };
 
 $(document).ready(function () {
@@ -233,12 +233,12 @@ var getToken = function getToken(callback, data) {
 //Handles error by displaying it on the page.
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({ width: 'toggle' }, 350);
+  $("#linkMessage").animate({ width: 'toggle' }, 350);
 };
 
 //Redirects the client to the given page.
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({ width: 'hide' }, 350);
+  $("#linkMessage").animate({ width: 'hide' }, 350);
   window.location = response.redirect;
 };
 

@@ -1,15 +1,15 @@
-const handleDomo = (e) => {
+const handleLink = (e) => {
     e.preventDefault();
     
-    $("#domoMessage").animate({width:'hide'},350);
+    $("#linkMessage").animate({width:'hide'},350);
     
-    if($("#domoName").val() == '' || $("#domoAge").val() == ''){
+    if($("#linkName").val() == '' || $("#linkAge").val() == ''){
       handleError("RAWR! Name and age are required");
       return false;
     }
     
-    sendAjax('POST', $("#domoForm").attr("action"),$("#domoForm").serialize(),function() {
-      loadDomosFromServer();
+    sendAjax('POST', $("#linkForm").attr("action"),$("#linkForm").serialize(),function() {
+      loadLinksFromServer();
     });
     
     return false;
@@ -19,119 +19,119 @@ const handleDomo = (e) => {
   const handleUpdate = (e) => {
     e.preventDefault();
     
-    $("#domoMessage").animate({width:'hide'},350);
+    $("#LinkMessage").animate({width:'hide'},350);
     
     sendAjax('POST', $("#updateForm").attr("action"),$("#updateForm").serialize(),function() {
-      getToken(generateDomoForm,{});
-      loadDomosFromServer();
+      getToken(generateLinkForm,{});
+      loadLinksFromServer();
     });
     
     return false;
   };
   
   
-  const DomoForm = (props) => {
+  const LinkForm = (props) => {
     return (
-      <form id="domoForm"
-        onSubmit={handleDomo}
-        name="domoForm"
+      <form id="linkForm"
+        onSubmit={handleLink}
+        name="linkForm"
         action="/maker"
         method="POST"
-        className="domoForm"
+        className="linkForm"
         >
         <label htmlFor="name">Name: </label>
-        <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
+        <input id="linkName" type="text" name="name" placeholder="Link Name"/>
         <label htmlFor="age">Age: </label>
-        <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
+        <input id="linkAge" type="text" name="age" placeholder="Link Age"/>
         <label htmlFor="favorite">Likes: </label>
         <input id="fav" type="text" name="favorite" placeholder="unknown"/>
         <label htmlFor="leastFavorite">Dislikes: </label>
         <input id="leastFav" type="text" name="leastFavorite" placeholder="unknown"/>
         <input type="hidden" name="_csrf" value={props.csrf} />
-        <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
+        <input className="makeLinkSubmit" type="submit" value="Make Link"/>
       </form>
     );
   };
   
  
   const UpdateForm = (props) => {
-    const domo = props.domo;
+    const link = props.link;
     return (
       <form id="updateForm"
         onSubmit={handleUpdate}
         name="updateForm"
-        action="/updateDomo"
+        action="/updateLink"
         method="POST"
-        className="domoForm"
+        className="linkForm"
         >
         <label htmlFor="name">Name: </label>
-        <input id="domoName" type="text" name="name" placeholder={domo.name}/>
+        <input id="linkName" type="text" name="name" placeholder={link.name}/>
         <label htmlFor="age">Age: </label>
-        <input id="domoAge" type="text" name="age" placeholder={domo.age}/>
+        <input id="linkAge" type="text" name="age" placeholder={link.age}/>
         <label htmlFor="favorite">Likes: </label>
-        <input id="fav" type="text" name="favorite" placeholder={domo.favorite}/>
+        <input id="fav" type="text" name="favorite" placeholder={link.favorite}/>
         <label htmlFor="leastFavorite">Dislikes: </label>
-        <input id="leastFav" type="text" name="leastFavorite" placeholder={domo.leastFavorite}/>
+        <input id="leastFav" type="text" name="leastFavorite" placeholder={link.leastFavorite}/>
         <input type="hidden" name="_csrf" value={props.csrf} />
-        <input type="hidden" name="_id" value={domo._id} />
-        <input className="makeDomoSubmit" type="submit" value="Save Domo"/>
-        <input className="makeDomoSubmit" type="button" id="cancelEdit" value="Cancel"/>
+        <input type="hidden" name="_id" value={link._id} />
+        <input className="makeLinkSubmit" type="submit" value="Save Link"/>
+        <input className="makeLinkSubmit" type="button" id="cancelEdit" value="Cancel"/>
       </form>
     );
   };
   
   
-  const DomoList = function(props) {
-    if(props.domos.length === 0){
+  const LinkList = function(props) {
+    if(props.links.length === 0){
       return (
-        <div className="domolist">
-          <h3 className="emptyDomo">No Domos yet</h3>
+        <div className="linklist">
+          <h3 className="emptyLink">No Links yet</h3>
         </div>
       );
     }
     
-    const domoNodes = props.domos.map(function(domo) {
+    const linkNodes = props.links.map(function(link) {
       
       const setForm = (e) => {
         e.preventDefault();
         
-        getToken(generateUpdateForm,{ domo: domo});
+        getToken(generateUpdateForm,{ link: link});
         return false;
       };
       return (
-        <div key={domo._id} className="domo">
-          <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-          <h3 className="domoName"> Name: {domo.name}</h3>
-          <h3 className="domoAge"> Age: {domo.age}</h3>
-          <h4>Favorite: {domo.favorite}</h4>
-          <h4>Least Favorite: {domo.leastFavorite}</h4>
+        <div key={link._id} className="link">
+          <img src="/assets/img/linkface.jpeg" alt="link face" className="linkFace" />
+          <h3 className="linkName"> Name: {link.name}</h3>
+          <h3 className="linkAge"> Age: {link.age}</h3>
+          <h4>Favorite: {link.favorite}</h4>
+          <h4>Least Favorite: {link.leastFavorite}</h4>
           <a className="editButton" href="" onClick={setForm}>Edit</a>
         </div>
       );
     });
     
     return (
-      <div id="domoList">
-        {domoNodes}
+      <div id="linkList">
+        {linkNodes}
       </div>
     );
   };
   
-  // Ajax request to get a list of Domos from the server
-  const loadDomosFromServer = () => {
-    sendAjax('GET','/getDomos',null, (data) => {
+  // Ajax request to get a list of Links from the server
+  const loadLinksFromServer = () => {
+    sendAjax('GET','/getLinks',null, (data) => {
       //console.dir(data);
       ReactDOM.render(
-        <DomoList domos={data.domos} />, document.querySelector("#domos")
+        <LinkList links={data.links} />, document.querySelector("#links")
       );
     });
   };
   
-  //Renders the DomoForm object
-  const generateDomoForm = function(csrf){
+  //Renders the LinkForm object
+  const generateLinkForm = function(csrf){
     //renders form
     ReactDOM.render(
-      <DomoForm csrf={csrf} />,document.querySelector("#makeDomo")
+      <LinkForm csrf={csrf} />,document.querySelector("#makeLink")
     );
   };
   
@@ -139,12 +139,12 @@ const handleDomo = (e) => {
   const generateUpdateForm = function(csrf,data){
     //renders form
     ReactDOM.render(
-      <UpdateForm csrf={csrf} domo={data.domo}/>,document.querySelector("#makeDomo")
+      <UpdateForm csrf={csrf} link={data.link}/>,document.querySelector("#makeLink")
     );
     
     document.querySelector("#cancelEdit").addEventListener("click", (e) => {
       e.preventDefault();
-      getToken(generateDomoForm,{});
+      getToken(generateLinkForm,{});
       return false;
     });
   };
@@ -152,14 +152,14 @@ const handleDomo = (e) => {
   // Sets up the maker page
   const setup = function(csrf) {
     //console.log("Setup - maker called");
-    generateDomoForm(csrf);
+    generateLinkForm(csrf);
     
-    //renders default domo list display
+    //renders default link list display
     ReactDOM.render(
-      <DomoList domos={[]} />,document.querySelector("#domos")
+      <LinkList links={[]} />,document.querySelector("#links")
     );
     
-    loadDomosFromServer();
+    loadLinksFromServer();
   };
   
   $(document).ready(function() {
