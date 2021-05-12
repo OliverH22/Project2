@@ -17,14 +17,12 @@ const makeLink = (req, res) => {
     return res.status(400).json({ error: 'RAWR! Both name and url are required' });
   }
 
-  const favorite = req.body.favorite || 'unknown';
-  const leastFavorite = req.body.leastFavorite || 'unknown';
+  const type = req.body.type || 'unknown';  
 
   const linkData = {
     name: req.body.name,
     url: req.body.url,
-    favorite,
-    leastFavorite,
+    type,    
     owner: req.session.account._id,
   };
 
@@ -87,13 +85,9 @@ const updateLink = (request, response) => {
       tempLink.url = req.body.url;
     }
 
-    if (req.body.favorite) {
-      tempLink.favorite = req.body.favorite;
-    }
-
-    if (req.body.leastFavorite) {
-      tempLink.leastFavorite = req.body.leastFavorite;
-    }
+    if (req.body.type) {
+      tempLink.type = req.body.type;
+    }  
 
     tempLink.updatedDate = Date.now();
 

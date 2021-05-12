@@ -6,8 +6,8 @@ var handleLink = function handleLink(e) {
 
   $("#linkMessage").animate({ width: 'hide' }, 350);
 
-  if ($("#linkName").val() == '' || $("#linkAge").val() == '') {
-    handleError("RAWR! Name and age are required");
+  if ($("#linkName").val() == '' || $("#linkUrl").val() == '') {
+    handleError("RAWR! Name and url are required");
     return false;
   }
 
@@ -51,22 +51,17 @@ var LinkForm = function LinkForm(props) {
     React.createElement("input", { id: "linkName", type: "text", name: "name", placeholder: "Link Name" }),
     React.createElement(
       "label",
-      { htmlFor: "age" },
-      "Age: "
+      { htmlFor: "url" },
+      "Url: "
     ),
-    React.createElement("input", { id: "linkAge", type: "text", name: "age", placeholder: "Link Age" }),
+    React.createElement("input", { id: "linkUrl", type: "text", name: "url", placeholder: "Link Url" }),
     React.createElement(
       "label",
-      { htmlFor: "favorite" },
-      "Likes: "
+      { htmlFor: "type" },
+      "Type: "
     ),
-    React.createElement("input", { id: "fav", type: "text", name: "favorite", placeholder: "unknown" }),
-    React.createElement(
-      "label",
-      { htmlFor: "leastFavorite" },
-      "Dislikes: "
-    ),
-    React.createElement("input", { id: "leastFav", type: "text", name: "leastFavorite", placeholder: "unknown" }),
+    React.createElement("input", { id: "fav", type: "text", name: "type", placeholder: "unknown" }),
+    // deleted dislikes    
     React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
     React.createElement("input", { className: "makeLinkSubmit", type: "submit", value: "Make Link" })
   );
@@ -92,28 +87,35 @@ var UpdateForm = function UpdateForm(props) {
     React.createElement("input", { id: "linkName", type: "text", name: "name", placeholder: link.name }),
     React.createElement(
       "label",
-      { htmlFor: "age" },
-      "Age: "
+      { htmlFor: "url" },
+      "url: "
     ),
-    React.createElement("input", { id: "linkAge", type: "text", name: "age", placeholder: link.age }),
+    React.createElement("input", { id: "linkUrl", type: "text", name: "url", placeholder: link.url }),
     React.createElement(
       "label",
-      { htmlFor: "favorite" },
-      "Likes: "
+      { htmlFor: "type" },
+      "Type: "
     ),
-    React.createElement("input", { id: "fav", type: "text", name: "favorite", placeholder: link.favorite }),
-    React.createElement(
-      "label",
-      { htmlFor: "leastFavorite" },
-      "Dislikes: "
-    ),
-    React.createElement("input", { id: "leastFav", type: "text", name: "leastFavorite", placeholder: link.leastFavorite }),
+    React.createElement("input", { id: "fav", type: "text", name: "type", placeholder: link.type }),
+   // deleted dislikes
     React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
     React.createElement("input", { type: "hidden", name: "_id", value: link._id }),
     React.createElement("input", { className: "makeLinkSubmit", type: "submit", value: "Save Link" }),
     React.createElement("input", { className: "makeLinkSubmit", type: "button", id: "cancelEdit", value: "Cancel" })
   );
 };
+// ---------------------------------------------------------------------
+// var Test = React.createClass({
+//   onClick: function(event){
+
+//   },
+//   render: function(){
+//      return (
+//         <a href="#" onClick={this.onClick}>Test Link</a>
+//      );
+//   }
+// }); 
+//-------------------------------------------------------------------------
 
 // Function for generating JSX to display the current user's links
 var LinkList = function LinkList(props) {
@@ -137,6 +139,14 @@ var LinkList = function LinkList(props) {
       getToken(generateUpdateForm, { link: link });
       return false;
     };
+
+    // var linksVideo = funstion linksVideo(e) {
+    //   e.preventDefault();
+
+    //   getToken(generateUpdateForm, { link: link });
+    //   return false;
+    // };
+
     return React.createElement(
       "div",
       { key: link._id, className: "link" },
@@ -147,24 +157,19 @@ var LinkList = function LinkList(props) {
         " Name: ",
         link.name
       ),
+      // URL link attempts
       React.createElement(
-        "h3",
-        { className: "linkAge" },
-        " Age: ",
-        link.age
+        "a",
+        { className: "linkUrl", href: link.url, onClick: link.url},        
+        " Url: ",
+        link.url
       ),
       React.createElement(
         "h4",
         null,
-        "Favorite thing: ",
-        link.favorite
-      ),
-      React.createElement(
-        "h4",
-        null,
-        "Least Favorite thing: ",
-        link.leastFavorite
-      ),
+        "Content Type: ",
+        link.type
+      ),     
       React.createElement(
         "a",
         { className: "editButton", href: "", onClick: setForm },
@@ -172,7 +177,11 @@ var LinkList = function LinkList(props) {
       )
     );
   });
+//----------------------------------------------------
 
+
+
+//------------------------------------------------------
   return React.createElement(
     "div",
     { id: "linkList" },
